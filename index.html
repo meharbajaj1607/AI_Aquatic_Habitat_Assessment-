@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Aquatic Habitat Assessment</title>
+    <meta name="description" content="Real-time AI-based aquatic habitat suitability assessment using IoT water quality monitoring.">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <header>
+
+        <h1>AI-Based Aquatic Habitat Assessment</h1>
+
+        <p>
+            IoT Water Quality Monitoring System
+        </p>
+
+        <div id="connectionStatus">
+            ● Connecting...
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- ============================= -->
+        <!-- OVERALL WATER CONDITION -->
+        <!-- ============================= -->
+
+        <section class="score-section">
+
+            <h2>ML + Rule-based Assessment</h2>
+
+            <div id="score">
+                --%
+            </div>
+
+            <div id="condition">
+                Waiting for sensor data...
+            </div>
+
+            <p id="lastUpdated">
+                Last updated: --
+            </p>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- SENSOR PARAMETERS -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>Water Quality Parameters</h2>
+
+            <div class="cards">
+
+
+                <!-- Temperature -->
+
+                <div class="card">
+
+                    <h3>Temperature</h3>
+
+                    <p id="temperature">
+                        --
+                    </p>
+
+                    <span>°C</span>
+
+                    <small>Measured</small>
+
+                </div>
+
+
+                <!-- Turbidity -->
+
+                <div class="card">
+
+                    <h3>Turbidity</h3>
+
+                    <p id="turbidity">
+                        --
+                    </p>
+
+                    <span>NTU*</span>
+
+                    <small>
+                        Prototype estimate
+                    </small>
+
+                </div>
+
+
+                <!-- TDS -->
+
+                <div class="card">
+
+                    <h3>TDS</h3>
+
+                    <p id="tds">
+                        --
+                    </p>
+
+                    <span>ppm*</span>
+
+                    <small>
+                        Prototype estimate
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- AI PREDICTIONS -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>AI Water Quality Prediction</h2>
+
+            <div class="cards">
+
+                <!-- pH -->
+
+                <div class="card">
+
+                    <h3>Predicted pH</h3>
+
+                    <p id="predictedPh">
+                        --
+                    </p>
+                    <small id="phPredictStatus" style="color: var(--text-muted);">
+                        ML predicted
+                    </small>
+
+                </div>
+
+                <!-- DO -->
+
+                <div class="card">
+
+                    <h3>Predicted DO</h3>
+
+                    <p id="predictedDo">
+                        --
+                    </p>
+
+                    <span style="display:inline-block; margin-top: 4px;">mg/L</span>
+
+                    <small id="doPredictStatus" style="color: var(--text-muted); display: block; margin-top: 4px;">
+                        ML predicted
+                    </small>
+
+                </div>
+
+            </div>
+            
+            <p id="mlStatus" style="margin-top: 1rem; color: var(--moderate); font-size: 0.9rem; background: #fffbeb; padding: 10px; border-radius: 4px;">
+                Status: Waiting for sensor data
+            </p>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- MODEL INFORMATION -->
+        <!-- ============================= -->
+
+        <section>
+            
+            <h2>Model Information</h2>
+            
+            <div class="device-info" style="margin-top: 10px;">
+                <p>
+                    <strong>Model:</strong>
+                    <span>Gradient Boosting Regressor</span>
+                </p>
+                <p>
+                    <strong>Inputs:</strong>
+                    <span>Temperature, TDS (→ Est. Conductance), Turbidity</span>
+                </p>
+                <p>
+                    <strong>Outputs:</strong>
+                    <span>pH, Dissolved Oxygen</span>
+                </p>
+            </div>
+
+            <p id="conversionNote" style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted); background: var(--water-light); padding: 10px; border-radius: 4px; border-left: 3px solid var(--water-primary);">
+                Note: ML models were trained on specific conductance (mS/cm). TDS readings are converted to estimated conductance using an approximate factor (K=0.55). Predictions carry additional uncertainty from this conversion.
+            </p>
+            
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- DETECTED PROBLEMS -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>Detected Problems</h2>
+
+            <ul id="problems">
+
+                <li>
+                    Waiting for sensor data...
+                </li>
+
+            </ul>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- RECOMMENDATIONS -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>Recommendations</h2>
+
+            <ul id="recommendations">
+
+                <li>
+                    Recommendations will appear after analysis.
+                </li>
+
+            </ul>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- INTERVENTION SIMULATOR -->
+        <!-- ============================= -->
+
+        <section class="simulator-section">
+
+            <h2>What-If Intervention Simulator</h2>
+
+            <p class="section-description" style="margin-bottom: 16px; color: var(--text-secondary); font-size: 13px;">
+                Adjust water quality parameters to see how changes would affect the habitat score.
+                Simulated values are <strong>not saved</strong> and do not affect actual sensor readings.
+            </p>
+
+            <div class="simulator-controls">
+
+                <div class="sim-input-group">
+                    <label for="simTemperature">Temperature (°C)</label>
+                    <input type="range" id="simTemperature" min="0" max="45" step="0.5" value="25">
+                    <span id="simTemperatureValue" class="sim-value">25.0</span>
+                </div>
+
+                <div class="sim-input-group">
+                    <label for="simTds">TDS (ppm)</label>
+                    <input type="range" id="simTds" min="0" max="1000" step="5" value="200">
+                    <span id="simTdsValue" class="sim-value">200</span>
+                </div>
+
+                <div class="sim-input-group">
+                    <label for="simTurbidity">Turbidity (NTU*)</label>
+                    <input type="range" id="simTurbidity" min="0" max="200" step="1" value="5">
+                    <span id="simTurbidityValue" class="sim-value">5</span>
+                </div>
+
+                <div class="sim-button-group" style="display: flex; gap: 8px;">
+                    <button id="simRunButton" class="sim-button" type="button">
+                        Run Simulation
+                    </button>
+                    <button id="simResetButton" class="sim-button" type="button" style="background: #64748b;">
+                        Reset to Live
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="sim-results" style="margin-top: 20px;">
+                <div class="sim-comparison">
+
+                    <div class="sim-card sim-card-live">
+                        <h4>Live Score</h4>
+                        <div id="simLiveScore" class="sim-score-value">--</div>
+                        <div id="simLiveCategory" class="sim-score-category">--</div>
+                    </div>
+
+                    <div class="sim-arrow">→</div>
+
+                    <div class="sim-card sim-card-simulated">
+                        <h4>Simulated Score</h4>
+                        <div id="simSimulatedScore" class="sim-score-value">--</div>
+                        <div id="simSimulatedCategory" class="sim-score-category">--</div>
+                    </div>
+
+                </div>
+
+                <div id="simPredictions" style="margin-top: 12px; font-size: 13px; color: var(--text-secondary);">
+                </div>
+
+                <div id="simProblems" style="margin-top: 12px;">
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- HISTORICAL ANALYSIS -->
+        <!-- ============================= -->
+
+        <section class="history-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Historical Analysis</h2>
+
+                    <p class="section-description">
+                        Historical sensor readings retrieved from Firebase.
+                    </p>
+                </div>
+
+                <span id="historyStatus">
+                    Loading history...
+                </span>
+
+            </div>
+
+
+            <!-- Temperature -->
+
+            <div class="chart-container">
+
+                <h3>Temperature</h3>
+
+                <canvas id="temperatureChart"></canvas>
+
+            </div>
+
+
+            <!-- Turbidity -->
+
+            <div class="chart-container">
+
+                <h3>Turbidity</h3>
+
+                <canvas id="turbidityChart"></canvas>
+
+            </div>
+
+
+            <!-- TDS -->
+
+            <div class="chart-container">
+
+                <h3>Total Dissolved Solids (TDS)</h3>
+
+                <canvas id="tdsChart"></canvas>
+
+            </div>
+
+
+            <!-- Water Quality Score -->
+
+            <div class="chart-container">
+
+                <h3>Historical Rule-based Water Quality Score</h3>
+
+                <canvas id="scoreChart"></canvas>
+
+            </div>
+
+        </section>
+
+        <!-- ============================= -->
+        <!-- SENSOR AVAILABILITY -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>Sensor Availability</h2>
+
+            <div class="availability">
+
+                <div>
+                    <strong>Temperature</strong>
+                    <span id="temperatureStatus">
+                        --
+                    </span>
+                </div>
+
+                <div>
+                    <strong>TDS</strong>
+                    <span id="tdsStatus">
+                        --
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Turbidity</strong>
+                    <span id="turbidityStatus">
+                        --
+                    </span>
+                </div>
+
+                <div>
+                    <strong>pH</strong>
+                    <span id="phStatus">
+                        ML prediction unavailable
+                    </span>
+                </div>
+
+                <div>
+                    <strong>Dissolved Oxygen</strong>
+                    <span id="doStatus">
+                        ML prediction unavailable
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- DEVICE INFORMATION -->
+        <!-- ============================= -->
+
+        <section>
+
+            <h2>Device Information</h2>
+
+            <div class="device-info">
+
+                <p>
+                    <strong>Device:</strong>
+                    <span id="deviceId">
+                        ESP32_01
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Wi-Fi Signal:</strong>
+                    <span id="wifiRSSI">
+                        --
+                    </span>
+                    dBm
+                </p>
+
+                <p>
+                    <strong>System Uptime:</strong>
+                    <span id="uptime">
+                        --
+                    </span>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- NOTE -->
+        <!-- ============================= -->
+
+        <section class="note">
+
+            <p>
+                <strong>Note:</strong>
+                TDS and turbidity values are prototype estimates
+                and require calibration. pH and dissolved oxygen
+                are ML-predicted from measured sensor inputs
+                using an approximate TDS-to-conductance conversion.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- ============================= -->
+    <!-- FOOTER -->
+    <!-- ============================= -->
+
+    <footer>
+
+        <p>
+            AI-Based Aquatic Habitat Assessment System
+        </p>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

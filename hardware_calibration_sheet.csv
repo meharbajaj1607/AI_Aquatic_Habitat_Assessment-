@@ -1,0 +1,5 @@
+timestamp,water_sample_id,temperature,raw_tds_sensor_voltage,tds_reading,raw_turbidity_sensor_voltage,turbidity_reading,reference_conductivity,reference_turbidity,reference_temperature,calibration_notes
+2026-10-17T10:00:00Z,CAL-DI-01,23.5,0.012,0.0,3.950,0.5,1.2,0.1,23.5,Deionized water zero reference check
+2026-10-17T10:15:00Z,CAL-KCL-01,24.0,1.150,450.0,3.940,0.8,1413.0,0.2,24.0,Standard 1413 uS/cm KCl conductivity calibration
+2026-10-17T10:30:00Z,CAL-TURB-01,24.2,0.820,320.0,2.150,42.0,850.0,40.0,24.1,Formazin 40 NTU turbidity calibration standard
+2026-10-17T11:00:00Z,SAMPLE-RIVER-01,22.8,0.640,245.0,2.820,18.5,520.0,16.2,22.8,Taiya River station field test sample
